@@ -1,11 +1,11 @@
 {
     "name": "toolbelt-22",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "title": "22's toolbelt",
     "description": "Internal library that contain helper classes and functions",
     "author": "0001-0110",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
     "dependencies": [
-        "base >= 2.0"
+        "base >= 2.1"
     ]
 }
