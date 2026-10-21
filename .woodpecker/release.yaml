@@ -1,0 +1,22 @@
+when:
+  - event: push
+    branch: main
+
+depends_on:
+  - validate-release
+
+steps:
+
+  - name: package
+    image: gcc:16.2.0
+    commands:
+      - make archive
+
+  - name: upload
+    image: python:3.10.21-alpine3.24
+    environment:
+      MOD_PORTAL_API_KEY:
+        from_secret: mod_portal_api_key
+    commands:
+      - pip install requests
+      - python .github/upload.py
