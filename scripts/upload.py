@@ -49,6 +49,7 @@ def update_mod(file_path):
             case _:
                 raise Exception(f"init_upload failed: {response.text}")
     finish_upload(file_path, response)
+    print(f"update successful: {response.text}")
 
 
 def publish_mod(file_path):
@@ -58,19 +59,18 @@ def publish_mod(file_path):
         request_body = {"mod": mod_name, "description": file.read()}
     response = requests.post(details_url, data=request_body, headers=request_headers)
     if not response.ok:
-        raise Exception()
+        raise Exception(f"init_publish failed: {response.text}")
     finish_upload(file_path)
+    print(f"publish successful: {response.text}")
 
 
 def upload():
     file_path = sys.argv[1]
 
     try:
-        response = update_mod(file_path)
+        update_mod(file_path)
     except UnknownModException:
         publish_mod(file_path)
-
-    print(f"upload successful: {response.text}")
 
 
 if __name__ == "__main__":
