@@ -5,6 +5,7 @@ from os import getenv
 
 mod_portal_url = "https://mods.factorio.com"
 init_upload_url = f"{mod_portal_url}/api/v2/mods/releases/init_upload"
+init_publish_url = f"{mod_portal_url}/api/v2/mods/init_publish"
 details_url = f"{mod_portal_url}/api/v2/mods/edit_details"
 
 
@@ -28,6 +29,16 @@ def get_headers():
     return {"Authorization": f"Bearer {api_key}"}
 
 
+def update_details():
+    mod_name = get_mod_name()
+    request_headers = get_headers()
+    with open("README.md", "rb") as file:
+        request_body = {"mod": mod_name, "description": file.read()}
+    response = requests.post(details_url, data=request_body, headers=request_headers)
+    if not response.ok:
+        raise Exception(f"update details failed: {response.text}")
+
+
 def finish_upload(file_path, init_response):
     upload_url = init_response.json()["upload_url"]
     with open(file_path, "rb") as file:
@@ -49,28 +60,29 @@ def update_mod(file_path):
             case _:
                 raise Exception(f"init_upload failed: {response.text}")
     finish_upload(file_path, response)
+    update_details()
+    print(f"update successful: {response.text}")
 
 
 def publish_mod(file_path):
     mod_name = get_mod_name()
+    request_body = {"mod": mod_name}
     request_headers = get_headers()
-    with open("README.md", "rb") as file:
-        request_body = {"mod": mod_name, "description": file.read()}
-    response = requests.post(details_url, data=request_body, headers=request_headers)
+    response = requests.post(init_publish_url, data=request_body, headers=request_headers)
     if not response.ok:
-        raise Exception()
+        raise Exception(f"init_publish failed: {response.text}")
     finish_upload(file_path)
+    update_details()
+    print(f"publish successful: {response.text}")
 
 
 def upload():
     file_path = sys.argv[1]
 
     try:
-        response = update_mod(file_path)
+        update_mod(file_path)
     except UnknownModException:
         publish_mod(file_path)
-
-    print(f"upload successful: {response.text}")
 
 
 if __name__ == "__main__":
