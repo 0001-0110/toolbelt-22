@@ -8,8 +8,9 @@ depends_on:
 steps:
 
   - name: package
-    image: gcc:16.2.0
+    image: alpine:3.24.3
     commands:
+      - apk add make git jq
       - make archive
 
   - name: upload

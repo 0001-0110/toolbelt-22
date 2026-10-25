@@ -10,7 +10,7 @@ depends_on:
 steps:
 
   - name: validate-version
-    image: alpine
+    image: alpine:3.24.3
     commands:
       - apk add jq
       - ./scripts/validate_release.sh
