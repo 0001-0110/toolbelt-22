@@ -1,5 +1,5 @@
 # Files to ignore when running git archive
-.github/ export-ignore
+.woodpecker/ export-ignore
 .gitignore export-ignore
 .gitattributes export-ignore
 .luacheckrc export-ignore
