@@ -20,4 +20,4 @@ steps:
         from_secret: mod_portal_api_key
     commands:
       - pip install requests
-      - python .github/upload.py
+      - python .scripts/upload.py
